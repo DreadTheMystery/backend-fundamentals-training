@@ -1,4 +1,5 @@
 const { users, nextId } = require('../data/users');
+const ApiError = require('../utils/ApiError');
 
 // GET / → returns plain text
 const getHome = (req, res) => {
@@ -24,19 +25,13 @@ const createUser = (req, res) => {
   
   // Validation
   if (!name || !email) {
-    return res.status(400).json({
-      success: false,
-      error: 'Name and email are required fields'
-    });
+    throw new ApiError(400, 'Name and email are required fields');
   }
   
   // Check if email already exists
   const existingUser = users.find(u => u.email === email);
   if (existingUser) {
-    return res.status(400).json({
-      success: false,
-      error: 'User with this email already exists'
-    });
+    throw new ApiError(400, 'User with this email already exists');
   }
   
   // Create new user
@@ -64,28 +59,19 @@ const updateUser = (req, res) => {
   const userIndex = users.findIndex(u => u.id === id);
   
   if (userIndex === -1) {
-    return res.status(404).json({
-      success: false,
-      error: `User with id ${id} not found`
-    });
+    throw new ApiError(404, `User with id ${id} not found`);
   }
   
   // Validation
   if (!name && !email) {
-    return res.status(400).json({
-      success: false,
-      error: 'At least one field (name or email) must be provided'
-    });
+    throw new ApiError(400, 'At least one field (name or email) must be provided');
   }
   
   // Check if email already exists (for other users)
   if (email) {
     const existingUser = users.find(u => u.email === email && u.id !== id);
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        error: 'Email already in use by another user'
-      });
+      throw new ApiError(400, 'Email already in use by another user');
     }
   }
   
@@ -108,10 +94,7 @@ const deleteUser = (req, res) => {
   const userIndex = users.findIndex(u => u.id === id);
   
   if (userIndex === -1) {
-    return res.status(404).json({
-      success: false,
-      error: `User with id ${id} not found`
-    });
+    throw new ApiError(404, `User with id ${id} not found`);
   }
   
   // Delete user
