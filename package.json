@@ -5,12 +5,20 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate:postgres": "node migrate-sqlite-to-postgres.js",
+    "seed:admin": "node create-test-user.js",
+    "seed:user": "node create-regular-user.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "bcryptjs": "^2.4.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.13.1",
+    "redis": "^5.11.0",
+    "sqlite3": "^5.1.7"
   }
 }

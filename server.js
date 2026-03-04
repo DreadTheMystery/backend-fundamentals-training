@@ -10,6 +10,12 @@ const errorHandler = require('./middleware/errorMiddleware');
 // Middleware
 app.use(express.json());
 
+// Note: Rate limiting is now applied per-route in userRoutes.js
+// This allows different limits for different endpoints
+
+// Serve static files (frontend)
+app.use(express.static('public'));
+
 // Mount routes
 app.use('/', userRoutes);
 
@@ -22,4 +28,5 @@ app.use(errorHandler);
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Frontend available at http://localhost:${PORT}/index.html`);
 });
